@@ -1,0 +1,17 @@
+{
+  "name": "x-tag-deck",
+  "description": "",
+  "version": "0.1.0",
+  "keywords": [
+    "web-components",
+    "x-tag"
+  ],
+  "main": [
+    "src/deck.js",
+    "src/deck.css"
+  ],
+  "dependencies": {
+    "x-tag-core": "*",
+    "brick-common": "*"
+  }
+}
