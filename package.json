@@ -1,6 +1,6 @@
 {
   "name": "x-deck",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "dependencies": {},
   "devDependencies": {
     "bower": "~1.2.0",
