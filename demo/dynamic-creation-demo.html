@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <link rel="stylesheet" type="text/css" href="testpage.css" />
+        <link rel="stylesheet" type="text/css" href="x-tag-components.css" />
+        <link rel="stylesheet" type="text/css" href="../src/deck.css" />
+        <script>
+            addEventListener("WebComponentsReady", function() {
+                console.log(document.readyState);
+                var demo_box = document.createElement("x-deck");
+                document.body.appendChild(demo_box);
+                console.log("x-deck creation succeeded");
+                var demo_card1 = document.createElement("x-card");
+                demo_card1.innerText = "testing...";
+                demo_box.appendChild(demo_card1);
+                var demo_card2 = document.createElement("x-card");
+                demo_card2.innerText = "dynamic creation succeeded";
+                demo_box.appendChild(demo_card2);
+                console.log("x-card creation succeeded");
+                setTimeout(function() {
+                    document.querySelector("x-deck").shuffleNext();
+                    console.log("x-deck element found in DOM");
+                }, 1500);
+            });
+        </script>
+        <script type="text/javascript" src="x-tag-components.js"></script>
+        <script type="text/javascript" src="../src/deck.js"></script>
+    </head>
+    
+    <body></body>
+
+</html>
