@@ -256,7 +256,10 @@
     * DOM element
     **/
     function _getAllCards(elem) {
-        return xtag.queryChildren(elem, "x-card");
+        try {
+            return xtag.queryChildren(elem, "x-card");
+        } catch (e) {}
+        return [];
     }
 
     /** _getCardAt : (DOM, Number) => DOM/null
@@ -862,10 +865,7 @@
             returns a list of all x-card elements in the deck
             **/
             getAllCards: function() {
-                try {
-                    return _getAllCards(this);
-                } catch (e) {}
-                return [];
+                return _getAllCards(this);
             },
 
             /** getSelectedCard: => DOM/null
