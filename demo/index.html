@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Stub Demo - X-Tag</title>
+    <link rel="stylesheet" type="text/css" href="x-tag-components.css"/>
+	<link rel="stylesheet" type="text/css" href="../src/main.css"/>
+
+    <script type="text/javascript" src="x-tag-components.js"></script> 
+    <script type="text/javascript" src="../src/main.js"></script>      
+	<style>
+		x-deck {
+			width: 300px;
+			height: 400px;
+		}
+		
+		x-card:nth-child(odd) {
+			background: limegreen;
+			font-size: 200%;
+		}
+		
+		x-card:nth-child(even) {
+			background: tomato;
+			font-size: 200%;
+		}
+	</style>
+</head>
+
+<body>
+
+	<h2>Create a Demo</h2>
+	
+	<x-deck loop>
+		<x-card>0</x-card>
+		<x-card transition-type="slide-left">1</x-card>
+		<x-card transition-type="none">2</x-card>
+		<x-card transition-type="slide-up">3</x-card>
+		<x-card>4</x-card>
+		<x-card transition-type="slide-down">5</x-card>
+		<x-card selected>6</x-card>
+		<x-card>7</x-card>
+		<x-card transition-type="slide-right">8</x-card>
+		<x-card>9</x-card>
+	</x-deck>
+	
+
+</body>
+
+<script>
+	var deck = document.querySelector('x-deck');
+	
+	xtag.addEvents(document, {
+		'tap:delegate(x-deck)': function(){
+			deck.nextCard();
+		},
+		'tap:delegate(body)': function(e){
+			if (e.target == document.body) deck.previousCard();
+		},
+	});
+</script>
+
+</html>

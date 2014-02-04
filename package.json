@@ -1,6 +1,6 @@
 {
   "name": "x-deck",
-  "version": "0.1.4",
+  "version": "0.1.2",
   "dependencies": {},
   "devDependencies": {
     "bower": "~1.2.0",
@@ -14,7 +14,7 @@
     "grunt-contrib-stylus": "~0.8.0"
   },
   "repository": {
-    "type": "git",
-    "url": "http://github.com/x-tag/deck.git"
+	"type": "git",
+	"url": "http://github.com/x-tag/deck.git"
   }
 }

@@ -15,24 +15,26 @@
     <article>
         <header><h1>x-deck demo</h1></header>
         <figure class="demo">
-            <x-deck id="demo-box">
+            <x-deck id="demo-box" selected-index="0">
                 <x-card>0</x-card>
-                <x-card>1</x-card>
+                <x-card transition-type="slide-up">1</x-card>
                 <x-card>2</x-card>
-                <x-card>3</x-card>
+                <x-card transition-type="slide-right">3</x-card>
                 <x-card>4</x-card>
             </x-deck>
         </figure>
 
         <div id="demo-controls">
-            <button onclick="getDemoBox().shufflePrev('reverse')"><-- Shuffle Prev</button>
-            <button onclick="getDemoBox().shuffleNext('forward')">Shuffle Next --></button>
+            <button onclick="getDemoBox().previousCard('reverse')"><-- Shuffle Prev</button>
+			<button onclick="getDemoBox().showCard(0)">Select Card at Index 0</button>
+            <button onclick="getDemoBox().nextCard()">Shuffle Next --></button>
             <br/>
             <button onclick="nextType()">change transition type</button>
             <button onclick="addCard()">Add card</button>
-            <button onclick="addCard(true)">Add card with transition-override</button>
+            <button onclick="addCard(true)">Add card with transition-type</button>
             <button onclick="removeCard(0)">Remove first card</button>
             <button onclick="removeCard()">Remove last card</button>
+			<button onclick="toggleLooping(event)">Toggle looping: OFF</button>
             <h3>Markup for recreating this deck:</h3>
             <pre id="markup-box" class="prettyprint codebox"></pre>
             <h3>(some) Properties:</h3>
@@ -43,21 +45,32 @@
             </div>
 
             <br/>
-            <button onclick="getDemoBox().shuffleTo(2)">shuffleTo 2 (default)</button>
-            <button onclick="getDemoBox().shuffleTo(2, 'auto')">shuffleTo 2 (auto)</button>
-            <button onclick="getDemoBox().shuffleTo(2, 'forward')">shuffleTo 2 (always forwards)</button>
-            <button onclick="getDemoBox().shuffleTo(2, 'reverse')">shuffleTo 2 (always reverse)</button>
-            <button onclick="triggerShow(2)">Trigger show event on 2</button>
-            <button onclick="callShow(2)">Call .show() on 2</button>
-            <button onclick="editSelectedIndex(2)">Set selected index to 2</button>
-            <br/>
-            <button onclick="getDemoBox().historyBack()"><-- Back in History</button>
-            <span id="history-status"></span>
-            <button onclick="getDemoBox().historyForward()">Forward in History --></button>
+            <button onclick="getDemoBox().showCard(1)">shuffleTo 1 (default)</button>
+            <button onclick="getDemoBox().showCard(2)">shuffleTo 2 (auto)</button>
+            <button onclick="getDemoBox().showCard(3, 'forward')">shuffleTo 3 (always forwards)</button>
+            <button onclick="getDemoBox().showCard(4, 'reverse')">shuffleTo 4 (always reverse)</button>
+            <button onclick="triggerShow(1)">Trigger reveal event on 1</button>
+            <button onclick="callShow(2)">Call .showCard() on 2</button>
+            <button onclick="editSelectedIndex(3)">Set selected-index to 3</button>
         </div>
     </article>
 
     <script>
+		
+		document.addEventListener('show', function(){
+			updateCodeBox();
+		}, false);
+		
+		document.addEventListener('hide', function(){
+			updateCodeBox();
+		}, false);
+		
+		function toggleLooping(e){
+			var demoBox = getDemoBox();
+			demoBox.loop = !demoBox.loop;
+			e.target.textContent = ('Toggle looping: ' + (demoBox.loop ? 'ON' : 'OFF'));
+		}
+		
         function cleanHtmlSource(html, ignoreAttrs){
             // remove any attributes given in parameter, but only if they are
             // actually in a tag
@@ -133,13 +146,7 @@
             return document.getElementById("demo-box");
         }
 
-        var transitionTypes = [
-            "scrollLeft", "scrollUp", "scrollRight", "scrollDown",
-            "flipX", "flipY",
-            "coverLeft", "coverUp", "coverRight", "coverDown",
-            "uncoverLeft", "uncoverUp", "uncoverRight", "uncoverDown",
-            "none"
-        ];
+        var transitionTypes = ["slide-left", "slide-right", "slide-up", "slide-down", "none"];
 
         document.addEventListener('DOMComponentsLoaded', function(){
             xtag.query(document, "x-card").forEach(function(card){
@@ -184,20 +191,18 @@
 
         function triggerShow(index){
             var demoBox = getDemoBox();
-            var card = demoBox.getCardAt(index);
-            xtag.fireEvent(card, "show");
+            var card = demoBox.children[index];
+            xtag.fireEvent(card, 'reveal');
             updateStatuses();
         }
 
         function callShow(index){
             var demoBox = getDemoBox();
-            var card = demoBox.getCardAt(index);
-            card.show();
+            demoBox.showCard(index);
         }
 
         function updateStatuses(isInit){
             updateCountBox();
-            updateHistoryControls();
             updateSelectedStatus();
             updateTypeStatus();
             updateCodeBox(isInit);
@@ -220,28 +225,7 @@
 
         function updateCountBox(){
             var demoBox = getDemoBox();
-            document.getElementById("count-label").textContent = ".numCards -> "+demoBox.getAllCards().length;
-        }
-
-        function updateHistoryControls(){
-            var demoBox = getDemoBox();
-            var statusBox = document.getElementById("history-status");
-            var backButton = statusBox.previousElementSibling;
-            var nextButton = statusBox.nextElementSibling;
-
-            var size = demoBox.currHistorySize;
-            var currIndex = demoBox.currHistoryIndex;
-
-            statusBox.textContent = "(index " + currIndex+") " +
-                                    "State #" + (currIndex+1) +
-                                    " out of " + size +
-                                    " (max " + demoBox.historyCap + ")";
-
-            (currIndex > 0) ? backButton.removeAttribute("disabled") :
-                              backButton.setAttribute("disabled", true);
-
-            (currIndex < size-1) ? nextButton.removeAttribute("disabled") :
-                                   nextButton.setAttribute("disabled", true);
+            document.getElementById("count-label").textContent = ".numCards -> "+demoBox.children.length;
         }
 
         // changes the transition type of deck
@@ -263,12 +247,12 @@
             //demoBox.transitionType = newType;
             demoBox.setAttribute("transition-type", newType);
 
-            demoBox.shuffleNext("forward");
+            demoBox.nextCard();
         }
 
         function addCard(addOverride){
             var demoBox = getDemoBox();
-            var numCards = demoBox.getAllCards().length;
+            var numCards = demoBox.children.length;
 
             var newCard = document.createElement("x-card");
             newCard.style.backgroundColor = randomColor();
@@ -281,26 +265,26 @@
                                         Math.floor(Math.random() *
                                                    transitionTypes.length)
                                     ] : "none";
-                newCard.transitionOverride = overrideType;
+                newCard.transitionType = overrideType;
             }
 
             demoBox.appendChild(newCard);
 
-            var allCards = demoBox.getAllCards();
-            console.log("Added card labeled", allCards.indexOf(newCard));
+            var cards = demoBox.cards;
+            console.log("Added card labeled", cards.indexOf(newCard));
 
-            demoBox.shuffleTo(allCards.indexOf(newCard));
+            demoBox.showCard(newCard);
         }
 
         function removeCard(index){
             var demoBox = getDemoBox();
-            var allCards = demoBox.getAllCards();
-            if(index !== undefined && index < allCards.length){
-                var removeCard = demoBox.getCardAt(index);
+            var cards = demoBox.cards;
+            if(index !== undefined && index < cards.length){
+                var removeCard = demoBox.children[index];
                 demoBox.removeChild(removeCard);
             }
-            else if (allCards.length > 0){
-                var lastCard = allCards[allCards.length - 1];
+            else if (cards.length > 0){
+                var lastCard = cards[cards.length - 1];
 
                 demoBox.removeChild(lastCard);
             }
