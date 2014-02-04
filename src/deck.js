@@ -256,10 +256,7 @@
     * DOM element
     **/
     function _getAllCards(elem) {
-        try {
-            return xtag.queryChildren(elem, "x-card");
-        } catch (e) {}
-        return [];
+        return xtag.queryChildren(elem, "x-card");
     }
 
     /** _getCardAt : (DOM, Number) => DOM/null
@@ -586,15 +583,13 @@
                                 parameter
     **/
     function _replaceWithIndex(deck, targetIndex, transitionType, progressType) {
-        if (targetIndex != -1) {
-            var newCard = _getCardAt(deck, targetIndex);
+        var newCard = _getCardAt(deck, targetIndex);
 
-            if (!newCard) {
-                throw "no card at index " + targetIndex;
-            }
-
-            _replaceCurrCard(deck, newCard, transitionType, progressType);
+        if (!newCard) {
+            throw "no card at index " + targetIndex;
         }
+
+        _replaceCurrCard(deck, newCard, transitionType, progressType);
     }
 
 
