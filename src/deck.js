@@ -583,13 +583,15 @@
                                 parameter
     **/
     function _replaceWithIndex(deck, targetIndex, transitionType, progressType) {
-        var newCard = _getCardAt(deck, targetIndex);
+        if (targetIndex != -1) {
+            var newCard = _getCardAt(deck, targetIndex);
 
-        if (!newCard) {
-            throw "no card at index " + targetIndex;
+            if (!newCard) {
+                throw "no card at index " + targetIndex;
+            }
+
+            _replaceCurrCard(deck, newCard, transitionType, progressType);
         }
-
-        _replaceCurrCard(deck, newCard, transitionType, progressType);
     }
 
 
@@ -860,7 +862,10 @@
             returns a list of all x-card elements in the deck
             **/
             getAllCards: function() {
-                return _getAllCards(this);
+                try {
+                    return _getAllCards(this);
+                } catch (e) {}
+                return [];
             },
 
             /** getSelectedCard: => DOM/null
