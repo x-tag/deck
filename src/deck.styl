@@ -1,429 +1,168 @@
-@import 'mixins';
-@import 'params';
-
-// positioning transforms
-
-shiftedRight() {
-    transformed(translateX(100%));
-}
-
-shiftedLeft() {
-    transformed(translateX(-100%));
-}
-
-shiftedUp() {
-    transformed(translateY(-100%));
-}
-
-shiftedDown() {
-    transformed(translateY(100%));
-}
-
-// apply perspective to card itself to fix rendering problem in IE10
-$flippedUp {
-    transformed(perspective(800px) rotateX(180deg));
-}
-
-$flippedDown {
-    transformed(perspective(800px) rotateX(-180deg));
-}
-
-$flippedRight {
-    transformed(perspective(800px) rotateY(180deg));
-}
-
-$flippedLeft {
-    transformed(perspective(800px) rotateY(-180deg));
-}
-
-$oldCard = "[leaving]";
-$newCard = "[selected]";
-$reverse = "[reverse]";
-
-$beforeAnimation =  "[_before-animation]";
-$afterAnimation = ":not(" + $beforeAnimation + ")";
-
-$oldStartingSelector = $oldCard + $beforeAnimation;
-$newStartingSelector = $newCard + $beforeAnimation;
-$oldEndingSelector = $oldCard + $afterAnimation;
-$newEndingSelector = $newCard + $afterAnimation;
-
-$oldCardZIndex = 1;
-$newCardZIndex = 2;
-
-$defaultCardOrder {
-    &{$newCard} {
-        z-index: $newCardZIndex;
-    }
-
-    &{$oldCard} {
-        z-index: $oldCardZIndex;
-    }
-}
-
-$swappedCardOrder {
-    &{$newCard} {
-        z-index: $oldCardZIndex;
-    }
-
-    &{$oldCard} {
-        z-index: $newCardZIndex;
-    }
-}
-
-$defaultTransform {
-    // do not use this default transform,
-    // as it breaks IE10's rendering of flipY
-
-   // transformed(translate3d(0,0,1px));
-}
-
-////////////////////////////////////////////////////
-// animation silent-classes for @extend'ing
-/////////////////////////////////////////////////////
-
-$scrollLeftAnim {
-    // initial positions for animation
-    &{$newStartingSelector} {
-        shiftedRight();
-    }
-
-    // target positions for animation
-    &{$oldEndingSelector} {
-        shiftedLeft();
-    }
-}
-
-$scrollRightAnim {
-    // initial positions for animation
-    &{$newStartingSelector} {
-        shiftedLeft();
-    }
-
-    // target positions for animation
-    &{$oldEndingSelector} {
-        shiftedRight();
-    }
-}
-
-$scrollUpAnim {
-    // initial positions for animation
-    &{$newStartingSelector} {
-        shiftedDown();
-    }
-
-    // target positions for animation
-    &{$oldEndingSelector} {
-        shiftedUp();
-    }
-}
-
-$scrollDownAnim {
-    // initial positions for animation
-    &{$newStartingSelector} {
-        shiftedUp();
-    }
-
-    // target positions for animation
-    &{$oldEndingSelector} {
-        shiftedDown();
-    }
-}
-
-$coverLeftAnim {
-    &{$newStartingSelector} {
-        shiftedRight();
-    }
-}
-
-$coverRightAnim {
-    &{$newStartingSelector} {
-        shiftedLeft();
-    }
-}
-
-$coverUpAnim {
-    &{$newStartingSelector} {
-        shiftedDown();
-    }
-}
-
-$coverDownAnim {
-    &{$newStartingSelector} {
-        shiftedUp();
-    }
-}
-
-$uncoverLeftAnim {
-    @extend $swappedCardOrder;
-    &{$oldEndingSelector} {
-        shiftedLeft();
-    }
-}
-
-$uncoverRightAnim {
-    @extend $swappedCardOrder;
-    &{$oldEndingSelector} {
-        shiftedRight();
-    }
-}
-
-$uncoverUpAnim {
-    @extend $swappedCardOrder;
-    &{$oldEndingSelector} {
-        shiftedUp();
-    }
-}
-
-$uncoverDownAnim {
-    @extend $swappedCardOrder;
-    &{$oldEndingSelector} {
-        shiftedDown();
-    }
-}
-
-
 x-deck {
-    @extend $borderBox;
-    display: block; //can be overridden with anything non-inline
-    position: relative;
-    overflow: hidden;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
 
+x-deck > x-card {
+	display: none;
+    position: absolute !important;
+	left: 0;
+	right: 0;
+	height: 100%;
     width: 100%;
-    height: 100%;
+	overflow: hidden;
+	z-index: 0;
+	opacity: 1;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+	-webkit-transform: translate(0%, 0%) scale(1);
+	-moz-transform: translate(0%, 0%) scale(1);
+	-ms-transform: translate(0%, 0%) scale(1);
+	-o-transform: translate(0%, 0%) scale(1);
+	transform: translate(0%, 0%) scale(1);
+}
 
-    & > x-card{
-        @extend $borderBox;
-        -webkit-transform-style: preserve-3d;
-        -moz-transform-style: preserve-3d;
-        -ms-transform-style: preserve-3d;
-        -o-transform-style: preserve-3d;
-        transform-style: preserve-3d;
-        display: block;
+x-deck > x-card[selected], x-deck > x-card[transition] {
+	display: block;	
+}
 
-        overflow: hidden;
-        position: absolute!important;
+/*** Default Transition ***/
 
-        animated(transform, 0.5s, ease, 0s);
-        backfaceVisibility(hidden);
-        @extend $defaultTransform;
+x-deck:not([transition-type]) > x-card:not([transition-type]),
+x-deck[transition-type="fade-scale"] > x-card,
+x-deck > x-card[transition-type="fade-scale"] {
+	opacity: 0;
+	-webkit-transform: scale(0.85);
+	-moz-transform: scale(0.85);
+	-ms-transform: scale(0.85);
+	-o-transform: scale(0.85);
+	transform: scale(0.85);
+	-webkit-transition: opacity 0.5s ease, -webkit-transform 0.5s ease;
+    -moz-transition: opacity 0.5s ease, -moz-transform 0.5s ease;
+    -ms-transition: opacity 0.5s ease, -ms-transform 0.5s ease;
+    -o-transition: opacity 0.5s ease, -o-transform 0.5s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
 
-        height: 100%;
-        width: 100%;
+x-deck > x-card[show][transition] {
+	opacity: 1;
+	-webkit-transform: scale(1);
+	-moz-transform: scale(1);
+	-ms-transform: scale(1);
+	-o-transform: scale(1);
+	transform: scale(1);
+}
 
-        left: 0px;
-        right: 0px;
 
-        z-index: 0;
+/*** General Slide Setup ***/
 
-        @extend $defaultCardOrder;
+x-deck[transition-type^="slide"] > x-card,
+x-deck > x-card[transition-type^="slide"] {
+  z-index: 1;
+}
 
-        &:not({$newCard}):not({$oldCard}){
-            visibility: hidden; // note: do not use display: none here!
-            opacity: 0;
-        }
+x-deck[transition-type^="slide"] > x-card[transition-direction="reverse"],
+x-deck > x-card[transition-type^="slide"][transition-direction="reverse"] {
+  z-index: 2;
+}
 
-        /** card animation types go here **/
+x-deck[transition-type^="slide"] > x-card[show],
+x-deck > x-card[show][transition-type^="slide"],
+x-deck[transition-type^="slide"] > x-card[hide],
+x-deck > x-card[hide][transition-type^="slide"] {
+	-webkit-transition: -webkit-transform 0.6s ease;
+    -moz-transition: -moz-transform 0.6s ease;
+    -ms-transition: -ms-transform 0.6s ease;
+    -o-transition: -o-transform 0.6s ease;
+    transition: transform 0.6s ease;
+}
 
-        // default animation: jump from one spot to another
-        &[card-anim-type]{
-            &{$oldStartingSelector}, &{$newStartingSelector},
-            &{$oldEndingSelector}, &{$newEndingSelector}{
-                @extend $defaultTransform;
-            }
-        }
+/*** Right/Left Slide Styles ***/
 
-        //////////////////////
-        // rotation animations
-        //////////////////////
-        &[card-anim-type=flipX]{
-            &:not({$reverse}){
-                // initial positions for animation
-                &{$newStartingSelector}{
-                    @extend $flippedUp;
-                }
+x-deck[transition-type="slide-right"] > x-card[show][transition-direction="forward"],
+x-deck > x-card[show][transition-direction="forward"][transition-type="slide-right"],
+x-deck[transition-type="slide-right"] > x-card[hide][transition-direction="reverse"],
+x-deck > x-card[hide][transition-direction="reverse"][transition-type="slide-right"],
 
-                // target positions for animation
-                &{$oldEndingSelector}{
-                    @extend $flippedDown;
-                }
-            }
-            &{$reverse}{
-                // initial positions for animation
-                &{$newStartingSelector}{
-                    @extend $flippedDown;
-                }
+x-deck[transition-type="slide-left"] > x-card[show][transition-direction="reverse"],
+x-deck > x-card[show][transition-direction="reverse"][transition-type="slide-left"],
+x-deck[transition-type="slide-left"] > x-card[hide][transition-direction="forward"],
+x-deck > x-card[hide][transition-direction="forward"][transition-type="slide-left"] {
+	-webkit-transform: translate(-100%, 0);
+	-moz-transform: translate(-100%, 0);
+	-ms-transform: translate(-100%, 0);
+	-o-transform: translate(-100%, 0);
+	transform: translate(-100%, 0);
+}
 
-                // target positions for animation
-                &{$oldEndingSelector}{
-                    @extend $flippedUp;
-                }
-            }
-        }
 
-        &[card-anim-type=flipY]{
-            &:not({$reverse}){
-                /* initial positions for animation */
-                &{$newStartingSelector}{
-                    @extend $flippedRight;
-                }
+x-deck[transition-type="slide-right"] > x-card[show][transition-direction="reverse"],
+x-deck > x-card[show][transition-direction="reverse"][transition-type="slide-right"],
+x-deck[transition-type="slide-right"] > x-card[hide][transition-direction="forward"],
+x-deck > x-card[hide][transition-direction="forward"][transition-type="slide-right"],
 
-                // target positions for animation
-                &{$oldEndingSelector}{
-                    @extend $flippedLeft;
-                }
-            }
-            &{$reverse}{
-                // initial positions for animation
-                &{$newStartingSelector}{
-                    @extend $flippedLeft;
-                }
+x-deck[transition-type="slide-left"] > x-card[show][transition-direction="forward"],
+x-deck > x-card[show][transition-direction="forward"][transition-type="slide-left"],
+x-deck[transition-type="slide-left"] > x-card[hide][transition-direction="reverse"],
+x-deck > x-card[hide][transition-direction="reverse"][transition-type="slide-left"] {
+	-webkit-transform: translate(100%, 0);
+	-moz-transform: translate(100%, 0);
+	-ms-transform: translate(100%, 0);
+	-o-transform: translate(100%, 0);
+	transform: translate(100%, 0);
+}
 
-                // target positions for animation
-                &{$oldEndingSelector}{
-                    @extend $flippedRight;
-                }
-            }
-        }
+/*** Up/Down Slide Styles ***/
 
-        //////////////////////
-        // scroll animations
-        //////////////////////
+x-deck[transition-type="slide-up"] > x-card[show][transition-direction="reverse"],
+x-deck > x-card[show][transition-direction="reverse"][transition-type="slide-up"],
+x-deck[transition-type="slide-up"] > x-card[hide][transition-direction="forward"],
+x-deck > x-card[hide][transition-direction="forward"][transition-type="slide-up"],
 
-        // new card scrolls from right to left
-        &[card-anim-type=scrollLeft]{
-            &:not({$reverse}){
-                @extend $scrollLeftAnim;
-            }
+x-deck[transition-type="slide-down"] > x-card[show][transition-direction="forward"],
+x-deck > x-card[show][transition-direction="forward"][transition-type="slide-down"],
+x-deck[transition-type="slide-down"] > x-card[hide][transition-direction="reverse"],
+x-deck > x-card[hide][transition-direction="reverse"][transition-type="slide-down"] {
+	-webkit-transform: translate(0, -100%);
+	-moz-transform: translate(0, -100%);
+	-ms-transform: translate(0, -100%);
+	-o-transform: translate(0, -100%);
+	transform: translate(0, -100%);
+}
 
-            // animation for reverse direction
-            &{$reverse}{
-                @extend $scrollRightAnim;
-            }
-        }
+x-deck[transition-type="slide-up"] > x-card[show][transition-direction="forward"],
+x-deck > x-card[show][transition-direction="forward"][transition-type="slide-up"],
+x-deck[transition-type="slide-up"] > x-card[hide][transition-direction="reverse"],
+x-deck > x-card[hide][transition-direction="reverse"][transition-type="slide-up"],
 
-        // new card scrolls from left to right
-        &[card-anim-type=scrollRight]{
-            &:not({$reverse}){
-                @extend $scrollRightAnim;
-            }
+x-deck[transition-type="slide-down"] > x-card[show][transition-direction="reverse"],
+x-deck > x-card[show][transition-direction="reverse"][transition-type="slide-down"],
+x-deck[transition-type="slide-down"] > x-card[hide][transition-direction="forward"],
+x-deck > x-card[hide][transition-direction="forward"][transition-type="slide-down"] {
+	-webkit-transform: translate(0, 100%);
+	-moz-transform: translate(0, 100%);
+	-ms-transform: translate(0, 100%);
+	-o-transform: translate(0, 100%);
+	transform: translate(0, 100%);
+}
 
-            // animation for reverse direction
-            &{$reverse}{
-                @extend $scrollLeftAnim;
-            }
-        }
+/*** General Slide Show State ***/
 
-        // new card scrolls from bottom to top
-        &[card-anim-type=scrollUp]{
-            &:not({$reverse}){
-                @extend $scrollUpAnim;
-            }
-
-            // animation for reverse direction
-            &{$reverse}{
-                @extend $scrollDownAnim;
-            }
-        }
-
-        // new card scrolls from top to bottom
-        &[card-anim-type=scrollDown]{
-            &:not({$reverse}){
-                @extend $scrollDownAnim;
-            }
-
-            // animation for reverse direction
-            &{$reverse}{
-                @extend $scrollUpAnim;
-            }
-        }
-
-        //////////////////////
-        // covering animations
-        //////////////////////
-
-        &[card-anim-type=coverLeft]{
-            &:not({$reverse}){
-                @extend $coverLeftAnim;
-            }
-
-            &{$reverse}{
-                @extend $uncoverRightAnim;
-            }
-        }
-
-        &[card-anim-type=coverRight]{
-            &:not({$reverse}){
-                @extend $coverRightAnim;
-            }
-
-            &{$reverse}{
-                @extend $uncoverLeftAnim;
-            }
-        }
-
-        &[card-anim-type=coverUp]{
-            &:not({$reverse}){
-                @extend $coverUpAnim;
-            }
-
-            &{$reverse}{
-                @extend $uncoverDownAnim;
-            }
-        }
-
-        &[card-anim-type=coverDown]{
-            &:not({$reverse}){
-                @extend $coverDownAnim;
-            }
-
-            &{$reverse}{
-                @extend $uncoverUpAnim;
-            }
-        }
-
-        //////////////////////
-        // uncovering animations
-        //////////////////////
-
-        &[card-anim-type=uncoverLeft]{
-            &:not({$reverse}){
-                @extend $uncoverLeftAnim;
-            }
-
-            &{$reverse}{
-                @extend $coverRightAnim;
-            }
-        }
-
-        &[card-anim-type=uncoverRight]{
-            &:not({$reverse}){
-                @extend $uncoverRightAnim;
-            }
-
-            &{$reverse}{
-                @extend $coverLeftAnim;
-            }
-        }
-
-        &[card-anim-type=uncoverUp]{
-            &:not({$reverse}){
-                @extend $uncoverUpAnim;
-            }
-
-            &{$reverse}{
-                @extend $coverDownAnim;
-            }
-        }
-
-        &[card-anim-type=uncoverDown]{
-            &:not({$reverse}){
-                @extend $uncoverDownAnim;
-            }
-
-            &{$reverse}{
-                @extend $coverUpAnim;
-            }
-        }
-    }
+x-deck[transition-type^="slide"] > x-card[show][transition],
+x-deck > x-card[show][transition][transition-type^="slide"] {
+	-webkit-transform: translate(0%, 0%);
+	-moz-transform: translate(0%, 0%);
+	-ms-transform: translate(0%, 0%);
+	-o-transform: translate(0%, 0%);
+	transform: translate(0%, 0%);
 }
