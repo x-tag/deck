@@ -7,40 +7,42 @@
       transDur = transPre + 'ransitionDuration',
       transProp = transPre + 'ransitionProperty',
       skipFrame = function(fn){
-        xtag.requestFrame(function(){ xtag.requestFrame(fn) });
+        xtag.requestFrame(function(){ xtag.requestFrame(fn); });
       },
-      ready = document.readyState == 'complete' ? 
-        skipFrame(function(){ ready = false }) :
+      ready = document.readyState == 'complete' ?
+        skipFrame(function(){ ready = false; }) :
         xtag.addEvent(document, 'readystatechange', function(){
           if (document.readyState == 'complete') {
-            skipFrame(function(){ ready = false });
+            skipFrame(function(){ ready = false; });
             xtag.removeEvent(document, 'readystatechange', ready);
           }
         });
-  
+
   function getTransitions(node){
-    return node.__transitions__ = node.__transitions__ || {};
+    node.__transitions__ = node.__transitions__ || {};
+    return node.__transitions__;
   }
-  
+
   function startTransition(node, name, transitions){
     var style = getComputedStyle(node),
         after = transitions[name].after;
     node.setAttribute('transition', name);
     if (after && !style[transDur].match(matchNum)) after();
   }
-  
+
   xtag.addEvents(document, {
     transitionend: function(e){
       var node = e.target,
           name = node.getAttribute('transition');
       if (name) {
-        var i = max = 0,
-            prop = null,
-            style = getComputedStyle(node),
-            transitions = getTransitions(node),
-            props = style[transProp].replace(replaceSpaces, '').split(',');
+        var i = 0,
+          max = 0,
+          prop = null,
+          style = getComputedStyle(node),
+          transitions = getTransitions(node),
+          props = style[transProp].replace(replaceSpaces, '').split(',');
         style[transDur].replace(captureTimes, function(match, time, unit){
-          var time = parseFloat(time) * (unit === 's' ? 1000 : 1);
+          time = parseFloat(time) * (unit === 's' ? 1000 : 1);
           if (time > max) prop = i, max = time;
           i++;
         });
@@ -50,7 +52,7 @@
       }
     }
   });
-  
+
   xtag.transition = function(node, name, obj){
     var transitions = getTransitions(node),
         options = transitions[name] = obj || {};
@@ -66,56 +68,56 @@
     }
     else startTransition(node, name, transitions);
   };
-  
+
   xtag.pseudos.transition = {
     onCompiled: function(fn, pseudo){
       var options = {},
-          when = pseudo.arguments[0] || 'immediate',
-          name = pseudo.arguments[1] || pseudo.key.split(':')[0];
+          when = pseudo['arguments'][0] || 'immediate',
+          name = pseudo['arguments'][1] || pseudo.key.split(':')[0];
       return function(){
         var target = this, args = arguments;
         if (this.hasAttribute('transition')) {
           options[when] = function(){
             return fn.apply(target, args);
-          }
+          };
           xtag.transition(this, name, options);
         }
         else return fn.apply(this, args);
-      }
+      };
     }
-  }
+  };
 
 })();
 
-(function(){  
-  
+(function(){
+
   var sides = {
         next: ['nextElementSibling', 'firstElementChild'],
         previous: ['previousElementSibling', 'lastElementChild']
       };
-  
+
   function indexOfCard(deck, card){
     return Array.prototype.indexOf.call(deck.children, card);
   }
-  
+
   function getCard(deck, item){
-    return item && item.nodeName ? item : isNaN(item) ? xtag.queryChildren(deck, item) : deck.children[item]
+    return item && item.nodeName ? item : isNaN(item) ? xtag.queryChildren(deck, item) : deck.children[item];
   }
 
   function checkCard(deck, card, selected){
-    return card && 
-           (selected ? card == deck.xtag.selected : card != deck.xtag.selected) && 
+    return card &&
+           (selected ? card == deck.xtag.selected : card != deck.xtag.selected) &&
            deck == card.parentNode &&
            card.nodeName == 'X-CARD';
   }
-  
+
   function shuffle(deck, side, direction){
     var getters = sides[side],
         selected = deck.xtag.selected && deck.xtag.selected[getters[0]];
     if (selected) deck.showCard(selected, direction);
     else if (deck.loop || deck.selectedIndex == -1) deck.showCard(deck[getters[1]], direction);
   }
-  
+
   xtag.register('x-deck', {
     events: {
       'reveal:delegate(x-card)': function(e){
@@ -126,11 +128,11 @@
       loop: {
         attribute: { boolean: true }
       },
-	  cards: {
-		get: function(){
-			return xtag.queryChildren(this, 'x-card');
-		}
-	  },
+    cards: {
+    get: function(){
+      return xtag.queryChildren(this, 'x-card');
+    }
+    },
       selectedCard: {
         get: function(){
           return this.xtag.selected || null;
@@ -152,12 +154,12 @@
               card = this.cards[index];
           if (card) {
             this.setAttribute('selected-index', index);
-			if (card != this.xtag.selected) this.showCard(card);
-		  }
-		  else {
-		    this.removeAttribute('selected-index');
-		    if (this.xtag.selected) this.hideCard(this.xtag.selected);
-		  }
+      if (card != this.xtag.selected) this.showCard(card);
+      }
+      else {
+        this.removeAttribute('selected-index');
+        if (this.xtag.selected) this.hideCard(this.xtag.selected);
+      }
         }
       },
       transitionType: {
@@ -166,7 +168,7 @@
           return this.getAttribute('transition-type') || 'fade-scale';
         }
       }
-    }, 
+    },
     methods: {
       nextCard: function(direction){
         shuffle(this, 'next', direction);
@@ -178,8 +180,8 @@
         var card = getCard(this, item);
         if (checkCard(this, card, false)) {
           var selected = this.xtag.selected,
-              nextIndex = indexOfCard(this, card),
-              direction = direction || (nextIndex > indexOfCard(this, selected) ? 'forward' : 'reverse');
+              nextIndex = indexOfCard(this, card);
+          direction = direction || (nextIndex > indexOfCard(this, selected) ? 'forward' : 'reverse');
           if (selected) this.hideCard(selected, direction);
           this.xtag.selected = card;
           this.selectedIndex = nextIndex;
@@ -189,9 +191,9 @@
               card.setAttribute('show', '');
               card.setAttribute('transition-direction', direction);
             },
-			after: function(){
-				xtag.fireEvent(card, 'show');
-			}
+      after: function(){
+        xtag.fireEvent(card, 'show');
+      }
           });
         }
       },
@@ -210,14 +212,14 @@
               card.removeAttribute('hide');
               card.removeAttribute('transition');
               card.removeAttribute('transition-direction');
-			  xtag.fireEvent(card, 'hide');
+        xtag.fireEvent(card, 'hide');
             }
           });
         }
       }
     }
   });
-  
+
   xtag.register('x-card', {
     lifecycle: {
       inserted: function(){
@@ -230,10 +232,10 @@
       removed: function(){
         var deck = this.xtag.deck;
         if (deck) {
-		  if (this == deck.xtag.selected) {
-			deck.xtag.selected = null;
-			deck.removeAttribute('selected-index');
-		  }
+      if (this == deck.xtag.selected) {
+      deck.xtag.selected = null;
+      deck.removeAttribute('selected-index');
+      }
           else deck.showCard(deck.selectedCard);
           this.xtag.deck = null;
         }
