@@ -140,11 +140,6 @@
   }
 
   xtag.register('x-deck', {
-    lifecycle: {
-      created: function () {
-        this.setAttribute('transition-type', this.getAttribute('transition-type') || 'slide-left');
-      }
-    },
     events: {
       'reveal:delegate(x-card)': function (e){
         if (this.parentNode == e.currentTarget) {
@@ -194,10 +189,7 @@
         }
       },
       transitionType: {
-        attribute: { name: 'transition-type' },
-        get: function(){
-          return this.getAttribute('transition-type') || 'slide-left';
-        }
+        attribute: { name: 'transition-type' }
       }
     },
     methods: {

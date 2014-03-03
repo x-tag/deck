@@ -20,9 +20,10 @@ Note that `<x-card>` elements can contain any kind of html markup!
 
 ## ___transition-type___ / ___transitionType___
 
-Defines the type of animation to use for cycling between cards
+Defines the type of animation to use for cycling between cards. The default is 
+no transition animation - cars are switched instantaneously.
 
-Can either be set as an HTML attribute under the name `transition-type` or
+This property can either be set as an HTML attribute under the name `transition-type`, or
 programmatically with the property `transitionType`
 
 Valid options:
@@ -32,7 +33,6 @@ Valid options:
 * [slide-right](demo/transition_type_gifs/scrollRight.gif)
 * [slide-down](demo/transition_type_gifs/scrollDown.gif)
 * [fade-scale](demo/transition_type_gifs/coverLeft.gif)
-* [none](demo/transition_type_gifs/none.gif)
 
 ## ___selected-index___ / ___selectedIndex___
 
