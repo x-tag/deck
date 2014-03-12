@@ -126,7 +126,7 @@
     return card &&
            (selected ? card == deck.xtag.selected : card != deck.xtag.selected) &&
            deck == card.parentNode &&
-           card.nodeName == 'X-CARD';
+           card.nodeName.toLowerCase() == 'x-card';
   }
 
   function shuffle(deck, side, direction){
@@ -253,7 +253,7 @@
     lifecycle: {
       inserted: function (){
         var deck = this.parentNode;
-        if (deck.nodeName == 'X-DECK') {
+        if (deck.nodeName.toLowerCase() == 'x-deck') {
           this.xtag.deck = deck;
           if (this != deck.selected && this.selected) {
             deck.showCard(this);
