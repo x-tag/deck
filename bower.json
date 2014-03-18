@@ -1,7 +1,7 @@
 {
   "name": "x-tag-deck",
   "description": "",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "keywords": [
     "web-components",
     "x-tag"
@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "x-tag-core": "*",
-    "x-tag-transitions":"*",
+    "x-tag-transitions": "*",
     "brick-common": "*"
   }
 }
