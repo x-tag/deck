@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "x-tag-core": "*",
+    "x-tag-transitions":"*",
     "brick-common": "*"
   }
 }
