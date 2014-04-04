@@ -6,7 +6,7 @@ function updateDemoSect(demoSect, isInit){
     var deck = getDeck(demoSect);
     var markupEl = DemoHelpers.getMarkupEl(demoSect, "html");
 
-    var ignoreAttrs = ["style", "reverse","selected","hide", "class"];
+    var ignoreAttrs = ["style", "reverse","show","hide", "class"];
     // to indicate that initializing selected-index is not required
     if(isInit) ignoreAttrs.push("selected-index");
 
@@ -100,7 +100,7 @@ function initCardAddRemoveButtons(){
         if(length > 0){
             // deck.getCardAt retrieves the <x-card> at the given index
             var lastCard = cards[length-1];
-            deck.removeChild(lastCard);            
+            deck.removeChild(lastCard);
         }
     });
 }
@@ -135,7 +135,7 @@ document.addEventListener('DOMComponentsLoaded', function(){
             DemoHelpers.updatePrettyprintEl(eventsEl, eventCounter.toString());
         }
 
-        if(demoSect === transitionDemo && 
+        if(demoSect === transitionDemo &&
             e.detail && e.detail.toggleProp === "transitionType")
         {
             var deck = demoSect.querySelector("x-deck");
