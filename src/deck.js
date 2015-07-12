@@ -93,7 +93,7 @@
         if (checkCard(this, card, false)) {
           var selected = this.xtag.selected,
               nextIndex = indexOfCard(this, card);
-          direction = direction || (nextIndex > indexOfCard(this, selected) ? 'forward' : 'reverse');
+          direction = direction || card.transitionDirection || (nextIndex > indexOfCard(this, selected) ? 'forward' : 'reverse');
           if (selected) {
             this.hideCard(selected, direction);
           }
@@ -164,7 +164,10 @@
     },
     accessors: {
       transitionType: {
-        attribute: { name: 'transition-type' }
+        attribute: {}
+      },
+      transitionDirection: {
+        attribute: {}
       },
       selected: {
         attribute: { boolean: true },
