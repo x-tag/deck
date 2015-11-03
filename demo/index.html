@@ -47,7 +47,10 @@
                 <x-card transition-enter="slide-up" transition-exit="slide-right"><div>1</div></x-card>
                 <x-card transition-enter="slide-right"><div>2</div></x-card>
                 <x-card transition-enter="slide-down" transition-exit="slide-left"><div>3</div></x-card>
-                <x-card transition-enter="fade-scale"><div>4</div></x-card>
+                <x-card transition-exit="fade-scale"><div>4</div></x-card>
+                <x-card transition-enter="slide-down" transition-exit="slide-up"><div>5</div></x-card>
+                <x-card transition-exit="slide-left"><div>6</div></x-card>
+                <x-card transition-enter="slide-up"><div>7</div></x-card>
             </x-deck>
         </figure>
 
@@ -63,7 +66,7 @@
     </article>
 
     <script>
-    cardCount = 5;
+    cardCount = document.querySelectorAll('x-card').length;
     deck = document.getElementById('deck');
 
 		function addCard(){
