@@ -155,7 +155,6 @@ x-deck[transition-exit^="fade"] > x-card[hide]:not([transition-enter^="slide"]) 
   z-index: 1;
 }
 
-
 x-deck > x-card[show][transition-enter^="slide"],
 x-deck[transition-enter^="slide"] > x-card[show]:not([transition-enter^="fade"]),
 x-deck > x-card[hide][transition-exit^="slide"],
@@ -168,8 +167,13 @@ x-deck[transition-enter^="slide"] > x-card[hide]:not([transition-exit^="fade"]) 
 x-deck > x-card[show][selected][transition-enter^="slide"],
 x-deck[transition-enter^="slide"] > x-card[show][selected]:not([transition-enter^="fade"]),
 x-deck > x-card[hide][selected][transition-exit^="slide"],
-x-deck[transition-exit^="slide"] > x-card[hide][selected]:not([transition-enter^="fade"]) {
+x-deck[transition-exit^="slide"] > x-card[hide][selected]:not([transition-exit^="fade"]) {
   z-index: 3;
+}
+
+x-deck[transition-exit^="fade"] > x-card[show][transition-direction="reverse"]:not([transition-exit^="slide"]),
+x-deck > x-card[show][transition-direction="reverse"][transition-exit^="fade"] {
+  z-index: 1;
 }
 
 x-deck > x-card[transition="show"] {
