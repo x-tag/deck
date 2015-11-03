@@ -51,6 +51,8 @@
                 <x-card transition-enter="slide-down" transition-exit="slide-up"><div>5</div></x-card>
                 <x-card transition-exit="slide-left"><div>6</div></x-card>
                 <x-card transition-enter="slide-up"><div>7</div></x-card>
+                <x-card><div>8</div></x-card>
+                <x-card><div>9</div></x-card>
             </x-deck>
         </figure>
 
@@ -71,7 +73,6 @@
 
 		function addCard(){
       var card = document.createElement('x-card');
-          card.transitionEnter = 'slide-up';
           card.innerHTML = '<div>' + cardCount++ + '</div>';
       deck.appendChild(card);
     }

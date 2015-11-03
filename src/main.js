@@ -100,6 +100,7 @@
           }
           xtag.transition(card, 'show', {
             before: function(){
+              card.removeAttribute('hide');
               card.setAttribute('show', '');
               card.setAttribute('transition-direction', direction);
             },

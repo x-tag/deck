@@ -148,23 +148,28 @@ x-deck > x-card[transition-enter="slide-down"][hide][transition-direction="rever
   transform: translate(0%, -100%);
 }
 
-x-deck[transition-exit^="slide"] > x-card[hide],
-x-deck > x-card[transition-exit^="slide"][hide],
-x-deck[transition-enter^="slide"] > x-card[show][transition-direction="reverse"],
-x-deck > x-card[transition-enter^="slide"][show][transition-enter="reverse"] {
+x-deck > x-card[show][transition-enter^="fade"],
+x-deck[transition-enter^="fade"] > x-card[show]:not([transition-enter^="slide"]),
+x-deck > x-card[hide][transition-exit^="fade"],
+x-deck[transition-exit^="fade"] > x-card[hide]:not([transition-enter^="slide"]) {
+  z-index: 1;
+}
+
+
+x-deck > x-card[show][transition-enter^="slide"],
+x-deck[transition-enter^="slide"] > x-card[show]:not([transition-enter^="fade"]),
+x-deck > x-card[hide][transition-exit^="slide"],
+x-deck[transition-exit^="slide"] > x-card[hide]:not([transition-enter^="fade"]),
+x-deck > x-card[hide][transition-enter^="slide"]:not([transition-exit="fade"]),
+x-deck[transition-enter^="slide"] > x-card[hide]:not([transition-exit^="fade"]) {
   z-index: 2;
 }
 
-x-deck[transition-enter^="slide"] > x-card[show]:not([transition-direction="reverse"]),
-x-deck > x-card[transition-enter^="slide"][show]:not([transition-enter="reverse"]) {
+x-deck > x-card[show][selected][transition-enter^="slide"],
+x-deck[transition-enter^="slide"] > x-card[show][selected]:not([transition-enter^="fade"]),
+x-deck > x-card[hide][selected][transition-exit^="slide"],
+x-deck[transition-exit^="slide"] > x-card[hide][selected]:not([transition-enter^="fade"]) {
   z-index: 3;
-}
-
-x-deck[transition-enter^="fade"] > x-card[show]:not([transition-enter^="slide"]),
-x-deck > x-card[transition-enter^="fade"][show],
-x-deck[transition-exit^="fade"] > x-card[hide]:not([transition-enter^="slide"]),
-x-deck > x-card[transition-exit^="fade"][hide] {
-  z-index: 1;
 }
 
 x-deck > x-card[transition="show"] {
