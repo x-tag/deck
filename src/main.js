@@ -31,16 +31,15 @@
   }
 
   xtag.register('x-deck', {
-    events: {
-      'reveal:delegate(x-card)': function (e){
-        if (this.parentNode == e.currentTarget) {
-          e.currentTarget.showCard(this);
-        }
-      }
-    },
     accessors: {
       loop: {
         attribute: { boolean: true }
+      },
+      transitionEnter: {
+        attribute: {}
+      },
+      transitionExit: {
+        attribute: {}
       },
       cards: {
         get: function(){
@@ -76,17 +75,14 @@
             this.hideCard(this.xtag.selected);
           }
         }
-      },
-      transitionType: {
-        attribute: { name: 'transition-type' }
       }
     },
     methods: {
       nextCard: function(direction){
-        shuffle(this, 'next', direction);
+        shuffle(this, 'next', 'forward');
       },
       previousCard: function(direction){
-        shuffle(this, 'previous', direction);
+        shuffle(this, 'previous', 'reverse');
       },
       showCard: function(item, direction){
         var card = getCard(this, item);
@@ -163,10 +159,13 @@
       }
     },
     accessors: {
-      transitionType: {
+      transitionDirection: {
         attribute: {}
       },
-      transitionDirection: {
+      transitionEnter: {
+        attribute: {}
+      },
+      transitionExit: {
         attribute: {}
       },
       selected: {

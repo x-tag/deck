@@ -22,7 +22,7 @@ module.exports = function(grunt) {
         }
       }
     },
-    bumpup: ['bower.json', 'package.json', 'xtag.json'],
+    bumpup: ['bower.json', 'package.json'],
     tagrelease: {
       file: 'package.json',
       prefix: '',
@@ -45,8 +45,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-tagrelease');
   grunt.loadNpmTasks('grunt-smush-components');
   grunt.loadNpmTasks('grunt-exec');
-  
-  grunt.registerTask('concat', ['contrib-concat']);
+
   grunt.registerTask('build', ['jshint','smush-components']);
   grunt.registerTask('bump:patch', ['bumpup:patch', 'tagrelease']);
   grunt.registerTask('push', ['exec:update_master','exec:update_gh_pages']);
