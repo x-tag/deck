@@ -3,6 +3,7 @@ x-deck {
   position: relative;
   overflow: hidden;
   height: 100%;
+  z-index: 0;
 }
 
 x-deck > x-card {
