@@ -39,41 +39,87 @@
 
 </head>
 <body>
-    <article>
-        <header><h1>x-deck demo</h1></header>
-        <figure class="demo">
-            <x-deck id="deck" selected-index="0" transition-enter="fade-scale">
-                <x-card transition-enter="slide-left"><div>0</div></x-card>
-                <x-card transition-enter="slide-up" transition-exit="slide-right"><div>1</div></x-card>
-                <x-card transition-enter="slide-right"><div>2</div></x-card>
-                <x-card transition-enter="slide-down" transition-exit="slide-left"><div>3</div></x-card>
-                <x-card transition-exit="fade-scale"><div>4</div></x-card>
-                <x-card transition-enter="slide-down" transition-exit="slide-up"><div>5</div></x-card>
-                <x-card transition-exit="slide-left"><div>6</div></x-card>
-                <x-card transition-enter="slide-up"><div>7</div></x-card>
-                <x-card><div>8</div></x-card>
-                <x-card><div>9</div></x-card>
-            </x-deck>
-        </figure>
+        <h2>No Default Transitions</h2>
+        <x-deck selected-index="0">
+          <x-card><div>0</div></x-card>
+          <x-card><div>1</div></x-card>
+          <x-card><div>2</div></x-card>
+          <x-card transition-enter="slide-down" transition-exit="slide-up"><div>3</div></x-card>
+        </x-deck>
 
-        <div id="demo-controls">
-            <button onclick="deck.previousCard('reverse')"><-- Shuffle Prev</button>
-			      <button onclick="deck.showCard(0)">Select Card at Index 0</button>
-            <button onclick="deck.nextCard()">Shuffle Next --></button>
+        <div>
+            <button onclick="this.parentNode.previousElementSibling.previousCard()"><-- Shuffle Prev</button>
+            <button onclick="this.parentNode.previousElementSibling.showCard(0)">Select Card at Index 0</button>
+            <button onclick="this.parentNode.previousElementSibling.nextCard()">Shuffle Next --></button>
             <br/>
-            <button onclick="addCard(true)">Add card</button>
-			      <button onclick="this.textContent = 'Toggle looping: ' + (deck.loop = !deck.loop)">Toggle looping: false</button>
-
+            <button onclick="addCard(this.parentNode.previousElementSibling)">Add card</button>
+            <button onclick="this.textContent = 'Toggle looping: ' + (this.parentNode.previousElementSibling.loop = !this.parentNode.previousElementSibling.loop)">Toggle looping: false</button>
         </div>
+
+        <h2>Default Enter & Exit Transitions</h2>
+        <x-deck selected-index="0" transition-enter="slide-right" transition-exit="slide-left">
+            <x-card><div>0</div></x-card>
+            <x-card transition-enter="fade-scale"><div>1</div></x-card>
+            <x-card transition-exit="slide-up"><div>2</div></x-card>
+            <x-card transition-enter="slide-down" transition-exit="slide-up"><div>3</div></x-card>
+        </x-deck>
+
+        <div>
+            <button onclick="this.parentNode.previousElementSibling.previousCard()"><-- Shuffle Prev</button>
+			      <button onclick="this.parentNode.previousElementSibling.showCard(0)">Select Card at Index 0</button>
+            <button onclick="this.parentNode.previousElementSibling.nextCard()">Shuffle Next --></button>
+            <br/>
+            <button onclick="addCard(this.parentNode.previousElementSibling)">Add card</button>
+			      <button onclick="this.textContent = 'Toggle looping: ' + (this.parentNode.previousElementSibling.loop = !this.parentNode.previousElementSibling.loop)">Toggle looping: false</button>
+        </div>
+
+        <h2>Default Enter Transition</h2>
+        <x-deck selected-index="0" transition-enter="slide-right">
+          <x-card><div>0</div></x-card>
+          <x-card><div>1</div></x-card>
+          <x-card><div>2</div></x-card>
+          <x-card transition-enter="slide-down" transition-exit="slide-up"><div>3</div></x-card>
+        </x-deck>
+
+        <div>
+            <button onclick="this.parentNode.previousElementSibling.previousCard()"><-- Shuffle Prev</button>
+			      <button onclick="this.parentNode.previousElementSibling.showCard(0)">Select Card at Index 0</button>
+            <button onclick="this.parentNode.previousElementSibling.nextCard()">Shuffle Next --></button>
+            <br/>
+            <button onclick="addCard(this.parentNode.previousElementSibling)">Add card</button>
+			      <button onclick="this.textContent = 'Toggle looping: ' + (this.parentNode.previousElementSibling.loop = !this.parentNode.previousElementSibling.loop)">Toggle looping: false</button>
+        </div>
+
+        <h2>Default Enter & Exit Transitions, with Random Overrides</h2>
+        <x-deck selected-index="0" transition-enter="slide-right" transition-exit="fade-scale">
+            <x-card transition-enter="slide-left"><div>0</div></x-card>
+            <x-card transition-enter="slide-up" transition-exit="slide-right"><div>1</div></x-card>
+            <x-card transition-enter="slide-down"><div>2</div></x-card>
+            <x-card transition-exit="slide-left"><div>3</div></x-card>
+            <x-card transition-enter="fade-scale"><div>4</div></x-card>
+            <x-card transition-enter="slide-down" transition-exit="slide-up"><div>5</div></x-card>
+            <x-card transition-exit="slide-left"><div>6</div></x-card>
+            <x-card transition-enter="slide-up"><div>7</div></x-card>
+            <x-card><div>8</div></x-card>
+            <x-card><div>9</div></x-card>
+        </x-deck>
+
+        <div>
+            <button onclick="this.parentNode.previousElementSibling.previousCard()"><-- Shuffle Prev</button>
+			      <button onclick="this.parentNode.previousElementSibling.showCard(0)">Select Card at Index 0</button>
+            <button onclick="this.parentNode.previousElementSibling.nextCard()">Shuffle Next --></button>
+            <br/>
+            <button onclick="addCard(this.parentNode.previousElementSibling)">Add card</button>
+			      <button onclick="this.textContent = 'Toggle looping: ' + (this.parentNode.previousElementSibling.loop = !this.parentNode.previousElementSibling.loop)">Toggle looping: false</button>
+        </div>
+
     </article>
 
     <script>
-    cardCount = document.querySelectorAll('x-card').length;
-    deck = document.getElementById('deck');
 
-		function addCard(){
+		function addCard(deck){
       var card = document.createElement('x-card');
-          card.innerHTML = '<div>' + cardCount++ + '</div>';
+          card.innerHTML = '<div>' + deck.children.length + '</div>';
       deck.appendChild(card);
     }
 
