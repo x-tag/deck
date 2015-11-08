@@ -10,7 +10,7 @@
   }
 
   function getCard(deck, item){
-    return item && item.nodeName ? item : isNaN(item) ? xtag.queryChildren(deck, item) : deck.children[item];
+    return item && item.nodeName ? item : isNaN(item) ? xtag.queryChildren(deck, item)[0] : deck.children[item];
   }
 
   function checkCard(deck, card, selected){
