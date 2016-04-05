@@ -79,13 +79,27 @@
       previousCard: function(){
         shuffle(this, 'previous', 'reverse');
       },
-      showCard: function(item, direction){
+      forward: function(){
+        var selected = this.xtag.selected;
+        var card =  selected.xtag.forwardCard;
+        if (card) this.showCard(card, 'forward', 'forward');
+      },
+      back: function(){
+        var selected = this.xtag.selected;
+        var card =  selected.xtag.backCard;
+        if (card) this.showCard(card, 'reverse', 'back');
+      },
+      showCard: function(item, direction, historys){
         var card = getCard(this, item);
         if (checkCard(this, card, false)) {
           var selected = this.xtag.selected,
               nextIndex = indexOfCard(this, card);
           direction = direction || card.transitionDirection || (nextIndex > indexOfCard(this, selected) ? 'forward' : 'reverse');
-          if (selected) this.hideCard(selected, direction);
+          if (selected) {
+            card.xtag[history == 'back' ? 'forwardCard' : 'backCard'] = selected;
+            selected.xtag[history == 'back' ? 'backCard' : 'forwardCard'] = card;
+            this.hideCard(selected, direction);
+          }
           this.xtag.selected = card;
           this.selectedIndex = nextIndex;
           if (!card.hasAttribute('selected')) card.selected = true;
