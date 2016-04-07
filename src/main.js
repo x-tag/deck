@@ -89,7 +89,7 @@
         var card =  selected.xtag.backCard;
         if (card) this.showCard(card, 'reverse', 'back');
       },
-      showCard: function(item, direction, historys){
+      showCard: function(item, direction, history){
         var card = getCard(this, item);
         if (checkCard(this, card, false)) {
           var selected = this.xtag.selected,
