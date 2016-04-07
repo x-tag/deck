@@ -33,6 +33,7 @@ x-deck > x-card {
   -ms-transition: opacity 0.4s ease, -ms-transform 0.4s ease;
   -o-transition: opacity 0.4s ease, -o-transform 0.4s ease;
   transition: opacity 0.4s ease, transform 0.4s ease;
+  will-change: display, opacity, -webkit-transform, transform, -webkit-transition, transition;
 }
 
 x-deck > x-card[selected], x-deck > x-card[show], x-deck > x-card[transition] {
